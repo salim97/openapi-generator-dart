@@ -33,7 +33,7 @@ dev_dependencies:
     git:
       url: https://github.com/YoungAgency/openapi-generator-dart.git
       ref: v1.0.0
-      path: openapi_generator
+      path: openapi-generator
 ```
 
 Annotate a dart class with @Openapi() annotation
