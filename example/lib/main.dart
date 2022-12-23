@@ -6,13 +6,15 @@ void main() {
 }
 
 @Openapi(
-    additionalProperties:
-        DioProperties(pubName: 'petstore_api', pubAuthor: 'Johnny dep..'),
-    inputSpecFile: 'openapi-spec.yaml',
-    typeMappings: {'Pet': 'ExamplePet'},
-    generatorName: Generator.dio,
-    alwaysRun: true,
-    outputDirectory: 'api/petstore_api')
+  additionalProperties:
+      DioProperties(pubName: 'petstore_api', pubAuthor: 'Johnny dep..'),
+  inputSpecFile: 'openapi-spec.yaml',
+  typeMappings: {'Pet': 'ExamplePet'},
+  generatorName: Generator.dio,
+  alwaysRun: true,
+  outputDirectory: 'api/petstore_api',
+  serializationLibrary: SerializationLibrary.json,
+)
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 

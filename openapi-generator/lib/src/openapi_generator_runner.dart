@@ -20,7 +20,10 @@ class OpenapiGenerator extends GeneratorForAnnotation<annots.Openapi> {
 
   @override
   FutureOr<String> generateForAnnotatedElement(
-      Element element, ConstantReader annotation, BuildStep buildStep) async {
+    Element element,
+    ConstantReader annotation,
+    BuildStep buildStep,
+  ) async {
     try {
       if (element is! ClassElement) {
         final friendlyName = element.displayName;
@@ -41,8 +44,11 @@ class OpenapiGenerator extends GeneratorForAnnotation<annots.Openapi> {
       var generator = getGeneratorNameFromEnum(generatorName!);
       command = '$command$separator-g$separator$generator';
 
-      var outputDirectory =
-          _readFieldValueAsString(annotation, 'outputDirectory', '');
+      var outputDirectory = _readFieldValueAsString(
+        annotation,
+        'outputDirectory',
+        '',
+      );
       if (outputDirectory.isNotEmpty) {
         var alwaysRun = _readFieldValueAsBool(annotation, 'alwaysRun', false)!;
         var filePath = path.join(outputDirectory, 'lib/api.dart');
@@ -54,23 +60,41 @@ class OpenapiGenerator extends GeneratorForAnnotation<annots.Openapi> {
         command = '$command$separator-o$separator$outputDirectory';
       }
 
-      command = appendTypeMappingCommandArgs(annotation, command, separator);
+      command = appendTypeMappingCommandArgs(
+        annotation,
+        command,
+        separator,
+      );
 
-      command =
-          appendReservedWordsMappingCommandArgs(annotation, command, separator);
+      command = appendReservedWordsMappingCommandArgs(
+        annotation,
+        command,
+        separator,
+      );
 
-      command =
-          appendAdditionalPropertiesCommandArgs(annotation, command, separator);
+      command = appendAdditionalPropertiesCommandArgs(
+        annotation,
+        command,
+        separator,
+      );
 
-      command =
-          appendSkipValidateSpecCommandArgs(annotation, command, separator);
+      command = appendSkipValidateSpecCommandArgs(
+        annotation,
+        command,
+        separator,
+      );
 
-      print('OpenapiGenerator :: [${command.replaceAll(separator, ' ')}]');
+      print(
+        'OpenapiGenerator :: [${command.replaceAll(separator, ' ')}]',
+      );
 
-      var binPath = (await Isolate.resolvePackageUri(Uri.parse(
-              'package:openapi_generator_cli/openapi-generator.jar')))!
+      var binPath = (await Isolate.resolvePackageUri(
+        Uri.parse('package:openapi_generator_cli/openapi-generator.jar'),
+      ))!
           .toFilePath(windows: Platform.isWindows);
-      test?.call(command.replaceAll(separator, ' '));
+      test?.call(
+        command.replaceAll(separator, ' '),
+      );
       // Include java environment variables in command
       var JAVA_OPTS = Platform.environment['JAVA_OPTS'] ?? '';
 
@@ -104,16 +128,22 @@ class OpenapiGenerator extends GeneratorForAnnotation<annots.Openapi> {
       }
 
       if (exitCode == 0) {
-        final command =
-            _getCommandWithWrapper('flutter', ['pub', 'get'], annotation);
+        final command = _getCommandWithWrapper(
+          'flutter',
+          ['pub', 'get'],
+          annotation,
+        );
         var installOutput = await Process.run(
-            command.executable, command.arguments,
-            runInShell: Platform.isWindows,
-            workingDirectory: '$outputDirectory');
+          command.executable,
+          command.arguments,
+          runInShell: Platform.isWindows,
+          workingDirectory: '$outputDirectory',
+        );
 
         print(installOutput.stderr);
         print(
-            'OpenapiGenerator :: Install exited with code ${installOutput.exitCode}');
+          'OpenapiGenerator :: Install exited with code ${installOutput.exitCode}',
+        );
         exitCode = installOutput.exitCode;
       }
 
@@ -133,8 +163,10 @@ class OpenapiGenerator extends GeneratorForAnnotation<annots.Openapi> {
           case annots.Generator.dio:
           case annots.Generator.dioAlt:
             try {
-              var runnerOutput =
-                  await runSourceGen(annotation, outputDirectory);
+              var runnerOutput = await runSourceGen(
+                annotation,
+                outputDirectory,
+              );
               print(
                   'OpenapiGenerator :: build runner exited with code ${runnerOutput.exitCode} ::');
             } catch (e) {
@@ -143,6 +175,14 @@ class OpenapiGenerator extends GeneratorForAnnotation<annots.Openapi> {
             }
             break;
         }
+
+        await Process.run(
+          'flutter',
+          [
+            'format',
+            '.',
+          ],
+        );
       }
     } catch (e) {
       print('Error generating spec $e');
@@ -155,32 +195,54 @@ class OpenapiGenerator extends GeneratorForAnnotation<annots.Openapi> {
       ConstantReader annotation, String outputDirectory) async {
     print('OpenapiGenerator :: running source code generation ::');
     var c = 'pub run build_runner build --delete-conflicting-outputs';
-    final command =
-        _getCommandWithWrapper('flutter', c.split(' ').toList(), annotation);
+    final command = _getCommandWithWrapper(
+      'flutter',
+      c.split(' ').toList(),
+      annotation,
+    );
     ProcessResult runnerOutput;
-    runnerOutput = await Process.run(command.executable, command.arguments,
-        runInShell: Platform.isWindows, workingDirectory: '$outputDirectory');
+    runnerOutput = await Process.run(
+      command.executable,
+      command.arguments,
+      runInShell: Platform.isWindows,
+      workingDirectory: '$outputDirectory',
+    );
     print(runnerOutput.stderr);
     return runnerOutput;
   }
 
   String appendAdditionalPropertiesCommandArgs(
-      ConstantReader annotation, String command, String separator) {
+    ConstantReader annotation,
+    String command,
+    String separator,
+  ) {
     var additionalProperties = '';
     annotation
         .read('additionalProperties')
         .revive()
         .namedArguments
         .entries
-        .forEach((entry) => {
-              additionalProperties =
-                  '$additionalProperties${additionalProperties.isEmpty ? '' : ','}${convertToPropertyKey(entry.key)}=${convertToPropertyValue(entry.value)}'
-            });
+        .forEach(
+          (entry) => {
+            additionalProperties =
+                '$additionalProperties${additionalProperties.isEmpty ? '' : ','}${convertToPropertyKey(entry.key)}=${convertToPropertyValue(entry.value)}'
+          },
+        );
 
     if (additionalProperties.isNotEmpty) {
       command =
           '$command$separator--additional-properties=$additionalProperties';
     }
+
+    final serializationLibraryAnnotation =
+        annotation.read('serializationLibrary').revive();
+
+    if (serializationLibraryAnnotation.accessor ==
+        'SerializationLibrary.json') {
+      command +=
+          ',serializationLibrary=json_serializable,useEnumExtension=true';
+    }
+
     return command;
   }
 
@@ -236,9 +298,15 @@ class OpenapiGenerator extends GeneratorForAnnotation<annots.Openapi> {
   }
 
   String appendTemplateDirCommandArgs(
-      ConstantReader annotation, String command, String separator) {
-    var templateDir =
-        _readFieldValueAsString(annotation, 'templateDirectory', '');
+    ConstantReader annotation,
+    String command,
+    String separator,
+  ) {
+    var templateDir = _readFieldValueAsString(
+      annotation,
+      'templateDirectory',
+      '',
+    );
     if (templateDir.isNotEmpty) {
       command = '$command$separator-t$separator$templateDir';
     }
@@ -247,7 +315,11 @@ class OpenapiGenerator extends GeneratorForAnnotation<annots.Openapi> {
 
   String appendInputFileCommandArgs(
       ConstantReader annotation, String command, String separator) {
-    var inputFile = _readFieldValueAsString(annotation, 'inputSpecFile', '');
+    var inputFile = _readFieldValueAsString(
+      annotation,
+      'inputSpecFile',
+      '',
+    );
     if (inputFile.isNotEmpty) {
       command = '$command$separator-i$separator$inputFile';
     }
@@ -255,7 +327,10 @@ class OpenapiGenerator extends GeneratorForAnnotation<annots.Openapi> {
   }
 
   String appendSkipValidateSpecCommandArgs(
-      ConstantReader annotation, String command, String separator) {
+    ConstantReader annotation,
+    String command,
+    String separator,
+  ) {
     var skipSpecValidation =
         _readFieldValueAsBool(annotation, 'skipSpecValidation', false)!;
     if (skipSpecValidation) {
@@ -272,7 +347,10 @@ class OpenapiGenerator extends GeneratorForAnnotation<annots.Openapi> {
   }
 
   Command _getCommandWithWrapper(
-      String command, List<String> arguments, ConstantReader annotation) {
+    String command,
+    List<String> arguments,
+    ConstantReader annotation,
+  ) {
     final wrapper = annotation
         .read('additionalProperties')
         .read('wrapper')
@@ -289,21 +367,30 @@ class OpenapiGenerator extends GeneratorForAnnotation<annots.Openapi> {
   }
 
   String _readFieldValueAsString(
-      ConstantReader annotation, String fieldName, String defaultValue) {
+    ConstantReader annotation,
+    String fieldName,
+    String defaultValue,
+  ) {
     var reader = annotation.read(fieldName);
 
     return reader.isNull ? defaultValue : reader.stringValue;
   }
 
-  Map? _readFieldValueAsMap(ConstantReader annotation, String fieldName,
-      [Map? defaultValue]) {
+  Map? _readFieldValueAsMap(
+    ConstantReader annotation,
+    String fieldName, [
+    Map? defaultValue,
+  ]) {
     var reader = annotation.read(fieldName);
 
     return reader.isNull ? defaultValue : reader.mapValue;
   }
 
-  bool? _readFieldValueAsBool(ConstantReader annotation, String fieldName,
-      [bool? defaultValue]) {
+  bool? _readFieldValueAsBool(
+    ConstantReader annotation,
+    String fieldName, [
+    bool? defaultValue,
+  ]) {
     var reader = annotation.read(fieldName);
 
     return reader.isNull ? defaultValue : reader.boolValue;

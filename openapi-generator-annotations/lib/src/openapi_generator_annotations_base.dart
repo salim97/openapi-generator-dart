@@ -80,21 +80,25 @@ class Openapi {
   /// e.g {'OffsetDate': 'package:time_machine/time_machine.dart'}
   final Map<String, String>? importMappings;
 
-  const Openapi(
-      {this.additionalProperties,
-      this.overwriteExistingFiles,
-      this.skipSpecValidation = false,
-      required this.inputSpecFile,
-      this.templateDirectory,
-      required this.generatorName,
-      this.outputDirectory,
-      this.typeMappings,
-      this.importMappings,
-      this.reservedWordsMappings,
-      this.apiPackage,
-      this.fetchDependencies = true,
-      this.runSourceGenOnOutput = true,
-      this.alwaysRun = false});
+  final SerializationLibrary serializationLibrary;
+
+  const Openapi({
+    this.additionalProperties,
+    this.overwriteExistingFiles,
+    this.skipSpecValidation = false,
+    required this.inputSpecFile,
+    this.templateDirectory,
+    required this.generatorName,
+    this.outputDirectory,
+    this.typeMappings,
+    this.importMappings,
+    this.reservedWordsMappings,
+    this.apiPackage,
+    this.fetchDependencies = true,
+    this.runSourceGenOnOutput = true,
+    this.alwaysRun = false,
+    this.serializationLibrary = SerializationLibrary.json,
+  });
 }
 
 class AdditionalProperties {
@@ -155,22 +159,23 @@ class AdditionalProperties {
   /// an error if the discriminator is missing.
   final bool legacyDiscriminatorBehavior;
 
-  const AdditionalProperties(
-      {this.allowUnicodeIdentifiers = false,
-      this.ensureUniqueParams = true,
-      this.useEnumExtension = false,
-      this.prependFormOrBodyParameters = false,
-      this.pubAuthor,
-      this.pubAuthorEmail,
-      this.pubDescription,
-      this.pubHomepage,
-      this.legacyDiscriminatorBehavior = true,
-      this.pubName,
-      this.pubVersion,
-      this.sortModelPropertiesByRequiredFlag = true,
-      this.sortParamsByRequiredFlag = true,
-      this.sourceFolder,
-      this.wrapper = Wrapper.none});
+  const AdditionalProperties({
+    this.allowUnicodeIdentifiers = false,
+    this.ensureUniqueParams = true,
+    this.useEnumExtension = false,
+    this.prependFormOrBodyParameters = false,
+    this.pubAuthor,
+    this.pubAuthorEmail,
+    this.pubDescription,
+    this.pubHomepage,
+    this.legacyDiscriminatorBehavior = true,
+    this.pubName,
+    this.pubVersion,
+    this.sortModelPropertiesByRequiredFlag = true,
+    this.sortParamsByRequiredFlag = true,
+    this.sourceFolder,
+    this.wrapper = Wrapper.none,
+  });
 }
 
 class JaguarProperties extends AdditionalProperties {
@@ -180,37 +185,37 @@ class JaguarProperties extends AdditionalProperties {
   /// Is the null fields should be in the JSON payload
   final bool? nullableFields;
 
-  const JaguarProperties(
-      {this.serialization,
-      this.nullableFields,
-      bool allowUnicodeIdentifiers = false,
-      bool ensureUniqueParams = true,
-      bool prependFormOrBodyParameters = false,
-      String? pubAuthor,
-      String? pubAuthorEmail,
-      String? pubDescription,
-      String? pubHomepage,
-      String? pubName,
-      String? pubVersion,
-      bool sortModelPropertiesByRequiredFlag = true,
-      bool sortParamsByRequiredFlag = true,
-      bool useEnumExtension = true,
-      String? sourceFolder})
-      : super(
-            allowUnicodeIdentifiers: allowUnicodeIdentifiers,
-            ensureUniqueParams: ensureUniqueParams,
-            prependFormOrBodyParameters: prependFormOrBodyParameters,
-            pubAuthor: pubAuthor,
-            pubAuthorEmail: pubAuthorEmail,
-            pubDescription: pubDescription,
-            pubHomepage: pubHomepage,
-            pubName: pubName,
-            pubVersion: pubVersion,
-            sortModelPropertiesByRequiredFlag:
-                sortModelPropertiesByRequiredFlag,
-            sortParamsByRequiredFlag: sortParamsByRequiredFlag,
-            sourceFolder: sourceFolder,
-            useEnumExtension: useEnumExtension);
+  const JaguarProperties({
+    this.serialization,
+    this.nullableFields,
+    bool allowUnicodeIdentifiers = false,
+    bool ensureUniqueParams = true,
+    bool prependFormOrBodyParameters = false,
+    String? pubAuthor,
+    String? pubAuthorEmail,
+    String? pubDescription,
+    String? pubHomepage,
+    String? pubName,
+    String? pubVersion,
+    bool sortModelPropertiesByRequiredFlag = true,
+    bool sortParamsByRequiredFlag = true,
+    bool useEnumExtension = true,
+    String? sourceFolder,
+  }) : super(
+          allowUnicodeIdentifiers: allowUnicodeIdentifiers,
+          ensureUniqueParams: ensureUniqueParams,
+          prependFormOrBodyParameters: prependFormOrBodyParameters,
+          pubAuthor: pubAuthor,
+          pubAuthorEmail: pubAuthorEmail,
+          pubDescription: pubDescription,
+          pubHomepage: pubHomepage,
+          pubName: pubName,
+          pubVersion: pubVersion,
+          sortModelPropertiesByRequiredFlag: sortModelPropertiesByRequiredFlag,
+          sortParamsByRequiredFlag: sortParamsByRequiredFlag,
+          sourceFolder: sourceFolder,
+          useEnumExtension: useEnumExtension,
+        );
 }
 
 class DioProperties extends AdditionalProperties {
@@ -220,37 +225,38 @@ class DioProperties extends AdditionalProperties {
   /// Is the null fields should be in the JSON payload
   final bool? nullableFields;
 
-  const DioProperties(
-      {this.dateLibrary,
-      this.nullableFields,
-      bool allowUnicodeIdentifiers = false,
-      bool ensureUniqueParams = true,
-      bool prependFormOrBodyParameters = false,
-      String? pubAuthor,
-      String? pubAuthorEmail,
-      String? pubDescription,
-      String? pubHomepage,
-      String? pubName,
-      String? pubVersion,
-      bool sortModelPropertiesByRequiredFlag = true,
-      bool sortParamsByRequiredFlag = true,
-      bool useEnumExtension = true,
-      String? sourceFolder})
-      : super(
-            allowUnicodeIdentifiers: allowUnicodeIdentifiers,
-            ensureUniqueParams: ensureUniqueParams,
-            prependFormOrBodyParameters: prependFormOrBodyParameters,
-            pubAuthor: pubAuthor,
-            pubAuthorEmail: pubAuthorEmail,
-            pubDescription: pubDescription,
-            pubHomepage: pubHomepage,
-            pubName: pubName,
-            pubVersion: pubVersion,
-            sortModelPropertiesByRequiredFlag:
-                sortModelPropertiesByRequiredFlag,
-            sortParamsByRequiredFlag: sortParamsByRequiredFlag,
-            sourceFolder: sourceFolder,
-            useEnumExtension: useEnumExtension);
+  const DioProperties({
+    this.dateLibrary,
+    this.nullableFields,
+    bool allowUnicodeIdentifiers = false,
+    bool ensureUniqueParams = true,
+    bool prependFormOrBodyParameters = false,
+    String? pubAuthor,
+    String? pubAuthorEmail,
+    String? pubDescription,
+    String? pubHomepage,
+    String? pubName,
+    String? pubVersion,
+    bool sortModelPropertiesByRequiredFlag = true,
+    bool sortParamsByRequiredFlag = true,
+    bool useEnumExtension = true,
+    String? sourceFolder,
+    SerializationLibrary? serializationLibrary,
+  }) : super(
+          allowUnicodeIdentifiers: allowUnicodeIdentifiers,
+          ensureUniqueParams: ensureUniqueParams,
+          prependFormOrBodyParameters: prependFormOrBodyParameters,
+          pubAuthor: pubAuthor,
+          pubAuthorEmail: pubAuthorEmail,
+          pubDescription: pubDescription,
+          pubHomepage: pubHomepage,
+          pubName: pubName,
+          pubVersion: pubVersion,
+          sortModelPropertiesByRequiredFlag: sortModelPropertiesByRequiredFlag,
+          sortParamsByRequiredFlag: sortParamsByRequiredFlag,
+          sourceFolder: sourceFolder,
+          useEnumExtension: useEnumExtension,
+        );
 }
 
 class DioAltProperties extends AdditionalProperties {
@@ -273,40 +279,40 @@ class DioAltProperties extends AdditionalProperties {
   /// Anything here will be added to the dev dependencies of your generated code.
   final String? pubspecDevDependencies;
 
-  const DioAltProperties(
-      {this.nullSafe,
-      this.nullSafeArrayDefault,
-      this.pubspecDependencies,
-      this.pubspecDevDependencies,
-      this.listAnyOf,
-      bool allowUnicodeIdentifiers = false,
-      bool ensureUniqueParams = true,
-      bool prependFormOrBodyParameters = false,
-      String? pubAuthor,
-      String? pubAuthorEmail,
-      String? pubDescription,
-      String? pubHomepage,
-      String? pubName,
-      String? pubVersion,
-      bool sortModelPropertiesByRequiredFlag = true,
-      bool sortParamsByRequiredFlag = true,
-      bool useEnumExtension = true,
-      String? sourceFolder})
-      : super(
-            allowUnicodeIdentifiers: allowUnicodeIdentifiers,
-            ensureUniqueParams: ensureUniqueParams,
-            prependFormOrBodyParameters: prependFormOrBodyParameters,
-            pubAuthor: pubAuthor,
-            pubAuthorEmail: pubAuthorEmail,
-            pubDescription: pubDescription,
-            pubHomepage: pubHomepage,
-            pubName: pubName,
-            pubVersion: pubVersion,
-            sortModelPropertiesByRequiredFlag:
-                sortModelPropertiesByRequiredFlag,
-            sortParamsByRequiredFlag: sortParamsByRequiredFlag,
-            sourceFolder: sourceFolder,
-            useEnumExtension: useEnumExtension);
+  const DioAltProperties({
+    this.nullSafe,
+    this.nullSafeArrayDefault,
+    this.pubspecDependencies,
+    this.pubspecDevDependencies,
+    this.listAnyOf,
+    bool allowUnicodeIdentifiers = false,
+    bool ensureUniqueParams = true,
+    bool prependFormOrBodyParameters = false,
+    String? pubAuthor,
+    String? pubAuthorEmail,
+    String? pubDescription,
+    String? pubHomepage,
+    String? pubName,
+    String? pubVersion,
+    bool sortModelPropertiesByRequiredFlag = true,
+    bool sortParamsByRequiredFlag = true,
+    bool useEnumExtension = true,
+    String? sourceFolder,
+  }) : super(
+          allowUnicodeIdentifiers: allowUnicodeIdentifiers,
+          ensureUniqueParams: ensureUniqueParams,
+          prependFormOrBodyParameters: prependFormOrBodyParameters,
+          pubAuthor: pubAuthor,
+          pubAuthorEmail: pubAuthorEmail,
+          pubDescription: pubDescription,
+          pubHomepage: pubHomepage,
+          pubName: pubName,
+          pubVersion: pubVersion,
+          sortModelPropertiesByRequiredFlag: sortModelPropertiesByRequiredFlag,
+          sortParamsByRequiredFlag: sortParamsByRequiredFlag,
+          sourceFolder: sourceFolder,
+          useEnumExtension: useEnumExtension,
+        );
 }
 
 enum DioDateLibrary {
@@ -341,3 +347,5 @@ enum Generator {
 }
 
 enum Wrapper { fvm, flutterw, none }
+
+enum SerializationLibrary { build_type, json }
