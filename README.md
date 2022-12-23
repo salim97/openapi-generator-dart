@@ -4,16 +4,13 @@ With this project, you can generate openapi client sdk libraries for your openap
 
 [license](https://github.com/gibahjoe/openapi-generator-dart/blob/master/openapi-generator-annotations/LICENSE).
 
-
 This repo contains the following dart libraries
 
-| Library       | Description | latest version |
-|---------------|-------------|---------------|
-| openapi-generator |Dev dependency for generating openapi sdk via dart source gen [see here for usage](https://pub.dev/packages/openapi_generator)| [![pub package](https://img.shields.io/pub/v/openapi_generator.svg)](https://pub.dev/packages/openapi_generator)|
-| openapi-generator-annotations|Annotations for annotating dart class with instructions for generating openapi sdk [see here for usage](https://pub.dev/packages/openapi_generator_annotations)|[![pub package](https://img.shields.io/pub/v/openapi_generator_annotations.svg)](https://pub.dev/packages/openapi_generator)|
-| openapi-generator-cli |Cli code openapi sdk generator for dart [see here for usage](https://pub.dev/packages/openapi_generator_cli)|[![pub package](https://img.shields.io/pub/v/openapi_generator_cli.svg)](https://pub.dev/packages/openapi_generator_cli)|
-
-
+| Library                       | Description                                                                                                                                                     | latest version                                                                                                               |
+| ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| openapi-generator             | Dev dependency for generating openapi sdk via dart source gen [see here for usage](https://pub.dev/packages/openapi_generator)                                  | [![pub package](https://img.shields.io/pub/v/openapi_generator.svg)](https://pub.dev/packages/openapi_generator)             |
+| openapi-generator-annotations | Annotations for annotating dart class with instructions for generating openapi sdk [see here for usage](https://pub.dev/packages/openapi_generator_annotations) | [![pub package](https://img.shields.io/pub/v/openapi_generator_annotations.svg)](https://pub.dev/packages/openapi_generator) |
+| openapi-generator-cli         | Cli code openapi sdk generator for dart [see here for usage](https://pub.dev/packages/openapi_generator_cli)                                                    | [![pub package](https://img.shields.io/pub/v/openapi_generator_cli.svg)](https://pub.dev/packages/openapi_generator_cli)     |
 
 ## Usage
 
@@ -21,33 +18,22 @@ Include [openapi-generator-annotations](https://pub.dev/packages/openapi_generat
 
 ```yaml
 dependencies:
-  openapi_generator_annotations: ^[latest-version]
-```
-For testing out the beta features in openapi generator, use the beta branch like below. This is not recommended for production builds
-```yaml
-dependencies:
-  openapi_generator_annotations: 
+  openapi_generator_annotations:
     git:
-      url: https://github.com/gibahjoe/openapi-generator-dart.git
-      ref: beta
+      url: https://github.com/YoungAgency/openapi-generator-dart.git
+      ref: v1.0.0
       path: openapi-generator-annotations
 ```
-
 
 Add [openapi-generator](https://pub.dev/packages/openapi_generator) in the dev dependencies section of your pubspec.yaml file:
 
 ```yaml
 dev_dependencies:
-  openapi_generator: ^[latest version]
-```
-For testing out the beta features in openapi generator, use the beta branch like below. This is not recommended for production builds
-```yaml
-dev_dependencies:
-  openapi_generator: 
+  openapi_generator:
     git:
-      url: https://github.com/gibahjoe/openapi-generator-dart.git
-      ref: beta
-      path: openapi-generator
+      url: https://github.com/YoungAgency/openapi-generator-dart.git
+      ref: v1.0.0
+      path: openapi_generator
 ```
 
 Annotate a dart class with @Openapi() annotation
@@ -62,14 +48,14 @@ Annotate a dart class with @Openapi() annotation
 class Example extends OpenapiGeneratorConfig {}
 ```
 
-Run 
+Run
+
 ```cmd
 flutter pub run build_runner build --delete-conflicting-outputs
 ```
-to generate open api client sdk from spec file specified in annotation. 
+
+to generate open api client sdk from spec file specified in annotation.
 The api sdk will be generated in the folder specified in the annotation. See examples for more details
-
-
 
 ## Features and bugs
 

@@ -12,7 +12,9 @@ dependencies:
   source_gen: '>=1.0.0 <=2.0.0'
   path: '>=1.0.0 <=2.0.0'
   analyzer: '>=1.4.0 <=5.0.0'
-  openapi_generator_annotations: 
+
+dependency_overrides:
+  openapi_generator_annotations:
     path: ../openapi-generator-annotations
   openapi_generator_cli: 
     path: ../openapi-generator-cli
