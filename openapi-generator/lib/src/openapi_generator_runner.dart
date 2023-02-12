@@ -182,7 +182,7 @@ class OpenapiGenerator extends GeneratorForAnnotation<annots.Openapi> {
             'format',
             '.',
           ],
-          runInShell: true , 
+          runInShell: true,
         );
       }
     } catch (e) {
