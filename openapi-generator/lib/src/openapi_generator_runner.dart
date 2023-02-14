@@ -176,22 +176,19 @@ class OpenapiGenerator extends GeneratorForAnnotation<annots.Openapi> {
             break;
         }
 
-
+        await Process.run(
+          'flutter',
+          [
+            'format',
+            '.',
+          ],
+          runInShell: true,
+        );
       }
     } catch (e) {
       print('Error generating spec $e');
       rethrow;
     }
-
-    // it's fine if it throw error.
-    await Process.run(
-      'flutter',
-      [
-        'format',
-        '.',
-      ],
-    );
-    
     return '';
   }
 
