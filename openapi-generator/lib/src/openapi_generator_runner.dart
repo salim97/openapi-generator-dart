@@ -175,15 +175,16 @@ class OpenapiGenerator extends GeneratorForAnnotation<annots.Openapi> {
             }
             break;
         }
-
-        await Process.run(
-          'flutter',
-          [
-            'format',
-            '.',
-          ],
-          runInShell: true,
-        );
+        try {
+          var runnerOutput = await runFlutterFormat(
+            annotation,
+            outputDirectory,
+          );
+          print('OpenapiGenerator :: Flutter Format exited with code ${runnerOutput.exitCode} ::');
+        } catch (e) {
+          print(e);
+          print('OpenapiGenerator :: could not complete Flutter Format ::');
+        }
       }
     } catch (e) {
       print('Error generating spec $e');
@@ -196,6 +197,26 @@ class OpenapiGenerator extends GeneratorForAnnotation<annots.Openapi> {
       ConstantReader annotation, String outputDirectory) async {
     print('OpenapiGenerator :: running source code generation ::');
     var c = 'pub run build_runner build --delete-conflicting-outputs';
+    final command = _getCommandWithWrapper(
+      'flutter',
+      c.split(' ').toList(),
+      annotation,
+    );
+    ProcessResult runnerOutput;
+    runnerOutput = await Process.run(
+      command.executable,
+      command.arguments,
+      runInShell: Platform.isWindows,
+      workingDirectory: '$outputDirectory',
+    );
+    print(runnerOutput.stderr);
+    return runnerOutput;
+  }
+
+  Future<ProcessResult> runFlutterFormat(
+      ConstantReader annotation, String outputDirectory) async {
+    print('OpenapiGenerator :: running Flutter Format ::');
+    var c = 'format .';
     final command = _getCommandWithWrapper(
       'flutter',
       c.split(' ').toList(),
