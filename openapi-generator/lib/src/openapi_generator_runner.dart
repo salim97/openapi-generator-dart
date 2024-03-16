@@ -218,7 +218,7 @@ class OpenapiGenerator extends GeneratorForAnnotation<annots.Openapi> {
     print('OpenapiGenerator :: running Flutter Format ::');
     var c = 'format .';
     final command = _getCommandWithWrapper(
-      'flutter',
+      'dart',
       c.split(' ').toList(),
       annotation,
     );
