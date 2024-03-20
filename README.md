@@ -20,7 +20,7 @@ Include [openapi-generator-annotations](https://pub.dev/packages/openapi_generat
 dependencies:
   openapi_generator_annotations:
     git:
-      url: https://github.com/YoungAgency/openapi-generator-dart.git
+      url: https://github.com/gibahjoe/openapi-generator-dart.git
       ref: v1.0.0
       path: openapi-generator-annotations
 ```
@@ -31,7 +31,7 @@ Add [openapi-generator](https://pub.dev/packages/openapi_generator) in the dev d
 dev_dependencies:
   openapi_generator:
     git:
-      url: https://github.com/YoungAgency/openapi-generator-dart.git
+      url: https://github.com/gibahjoe/openapi-generator-dart.git
       ref: v1.0.0
       path: openapi-generator
 ```
